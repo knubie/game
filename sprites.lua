@@ -18,6 +18,7 @@ end
 function draw(sprite)
 	local sheet = sheets[sprite.sheet_id]
 	local state = sheet.states[sprite.state]
+	print("state = "..state.y.." and frame = "..sprite.frame)
 	local quad = love.graphics.newQuad(
 		state.frames[sprite.frame], state.y,
 		state.width, state.height,
@@ -36,11 +37,15 @@ end
 
 function animate(sprite)
 	if sprite.active == false then
-		sprite.state = "stance"
+		sprite.state = "idle"
 	end
 	if sprite.frame < #sheets[sprite.sheet_id].states[sprite.state].frames then
 		sprite.frame = sprite.frame + 1
 	else
-		sprite.frame = 1
+		if sprite.state == "crouch" then
+			sprite.frame = 3
+		else
+			sprite.frame = 1
+		end
 	end
 end
