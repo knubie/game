@@ -4,11 +4,12 @@ local sheets = {}
 
 function new_state(sprite, state_name, w, h, y, frames)
 	local sheet = sheets[sprite.sheet_id]
-	sheet.states[state_name] = {}
-	sheet.states[state_name].width = w
-	sheet.states[state_name].height = h
-	sheet.states[state_name].y = y
-	sheet.states[state_name].frames = {}
+	sheet.states[state_name] = {
+		width = w,
+		height = h,
+		y = y,
+		frames = {}
+	}
 	for i,v in ipairs(frames) do
 		sheet.states[state_name].frames[i] = v
 	end
