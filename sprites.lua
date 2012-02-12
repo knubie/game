@@ -2,35 +2,43 @@ module(..., package.seeall)
 
 local sheets = {}
 
-function set_states(sheet, state_table)
-	for k,v in pairs(state_table) do
-		sheet["state"][k] = v
+function new_state(sprite, state_name, w, h, frames)
+	local sheet = sheets[sprite.sheet_id]
+	sheet.states[state_name] = {}
+	sheet.states[state_name].width = w
+	sheet.states[state_name].height = h
+	sheet.states[state_name].frames = {}
+	for i,v in ipairs(frames) do
+		sheet.states[state_name].frames[i] = v
 	end
 end
 
-function new_sheet(w, h, img)
-	return {cellw= w, cellh = h, img = love.graphics.newImage(img), state = {}}
+function draw(sprite)
+	local sheet = sheets[sprite.sheet_id]
+	local state = sheet.states[sprite.state]
+	local quad = love.graphics.newQuad(
+		state.frames[sprite.frame][1], state.frames[sprite.frame][2],
+		state.width, state.height,
+		sheet.img:getWidth(), sheet.img:getHeight()
+	)
+	love.graphics.drawq(sheet.img, quad, sprite.x, sprite.y)
 end
 
-sheets["zelda"] = new_sheet(40, 40, "darklink_lttp-oot-younglink_sheet.png")
+function new(src)
+	table.insert(sheets, {
+		img = love.graphics.newImage(src),
+		states = {}
+	})
+	return {x = 0, y = 0, state = nil, frame = 1, active = false, sheet_id = #sheets}
+end
 
-set_states(sheets["zelda"], {
-	front_idle = {0,0},
-	front_walk1 = {1,0},
-	front_walk2 = {2,0},
-	front_walk3 = {3,0},
-	front_walk4 = {4,0},
-	front_walk5 = {5,0},
-	front_walk6 = {6,0},
-	front_walk7 = {7,0}
-})
-
-function draw(sheet_name, sk, x, y)
-	sheet = sheets[sheet_name]
-	local quad = love.graphics.newQuad(
-		sheet["cellw"]*sheet["state"][sk][1], sheet["cellh"]*sheet["state"][sk][2],
-		sheet["cellw"], sheet["cellh"],
-		sheet["img"]:getWidth(), sheet["img"]:getHeight()
-	)
-	love.graphics.drawq(sheet["img"], quad, x, y)
+function animate(sprite)
+	if sprite.active == false then
+		sprite.state = "stance"
+	end
+	if sprite.frame < #sheets[sprite.sheet_id].states[sprite.state].frames then
+		sprite.frame = sprite.frame + 1
+	else
+		sprite.frame = 1
+	end
 end
