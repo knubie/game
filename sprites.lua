@@ -23,7 +23,7 @@ function draw(sprite)
 		state.width, state.height,
 		sheet.img:getWidth(), sheet.img:getHeight()
 	)
-	love.graphics.drawq(sheet.img, quad, sprite.x, sprite.y)
+	love.graphics.drawq(sheet.img, quad, sprite.x, 650-state.height)
 end
 
 function new(src)
@@ -31,7 +31,7 @@ function new(src)
 		img = love.graphics.newImage(src),
 		states = {}
 	})
-	return {x = 0, y = 0, state = nil, frame = 1, active = false, sheet_id = #sheets}
+	return {x = 0, state = nil, frame = 1, active = false, sheet_id = #sheets}
 end
 
 function animate(sprite)
