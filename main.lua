@@ -5,8 +5,8 @@ function love.load()
 	love.graphics.setBackgroundColor(255, 255, 255)
 	love.graphics.setMode(650, 650, false, true, 0) --set the window dimensions to 650 by 650 with no fullscreen, vsync on, and no antialiasing
 	cammy = sprites.new('assets/cammy.png')
-	sprites.new_state(cammy, "stance", 78, 93, {{70,482}, {160,482}, {248,482}, {334,482}, {421,482}})
-	sprites.new_state(cammy, "walk_forward", 75, 104, {{74, 587}, {152, 587}, {231, 587}, {309, 587}, {389, 587}, {468, 587}, {551, 587}, {631, 587}, {708, 587}, {788, 587}})
+	sprites.new_state(cammy, "stance", 78, 93, 482, {70,160,248,334,421,})
+	sprites.new_state(cammy, "walk_forward", 75, 104, 587, {74,152,231,309,389,468,551,631,708,788})
 	cammy.state = "stance"
 	i = 0
 end

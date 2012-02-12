@@ -2,11 +2,12 @@ module(..., package.seeall)
 
 local sheets = {}
 
-function new_state(sprite, state_name, w, h, frames)
+function new_state(sprite, state_name, w, h, y, frames)
 	local sheet = sheets[sprite.sheet_id]
 	sheet.states[state_name] = {}
 	sheet.states[state_name].width = w
 	sheet.states[state_name].height = h
+	sheet.states[state_name].y = y
 	sheet.states[state_name].frames = {}
 	for i,v in ipairs(frames) do
 		sheet.states[state_name].frames[i] = v
@@ -17,7 +18,7 @@ function draw(sprite)
 	local sheet = sheets[sprite.sheet_id]
 	local state = sheet.states[sprite.state]
 	local quad = love.graphics.newQuad(
-		state.frames[sprite.frame][1], state.frames[sprite.frame][2],
+		state.frames[sprite.frame], state.y,
 		state.width, state.height,
 		sheet.img:getWidth(), sheet.img:getHeight()
 	)
