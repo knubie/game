@@ -8,7 +8,7 @@ function new (src)
 		states = {}
 	})
 
-	local sprite = {x = 0, y = 0, state = nil, frame = 1, sheet_id = #sheets, facing = "right", speed = 0, jumpv = 0, dy = 0}
+	local sprite = {x = 0, y = 0, state = nil, frame = 1, sheet_id = #sheets, facing = "right", speed = 0, jumpv = 0, dy = 0, g = 0}
 
 	function sprite:init_states (new_states)
 
@@ -73,8 +73,10 @@ cammy:init_states({
 	{"crouch", 78, 89, 840, {96, 187, 270}},
 	{"neutral_jump", 65, 152, 942, {92, 162, 236, 305, 379, 453, 524}},
 	{"forward_jump", 122, 113, 1182, {94,223,366,506,645,782,912}},
-	{"backward_jump", 122, 113, 1182, {912,782,645,506,366,223,94}}
+	{"backward_jump", 122, 113, 1182, {912,782,645,506,366,223,94}},
+	{"sjab", 119, 96, 1631, {109,230,109}}
 })
 cammy.state = "idle"
 cammy.speed = 5
-cammy.jumpv = 15
+cammy.jumpv = 30
+cammy.g = 3.9

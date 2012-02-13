@@ -2,21 +2,36 @@ module(..., package.seeall)
 
 function update(sprite)
 
+	local left = love.keyboard.isDown("left") and not love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+	local left_up = love.keyboard.isDown("left") and love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+	local left_down = love.keyboard.isDown("left") and love.keyboard.isDown("down") and not love.keyboard.isDown("right") and not love.keyboard.isDown("up")
+	local right = love.keyboard.isDown("right") and not love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+	local right_up = love.keyboard.isDown("right") and love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+	local right_down = love.keyboard.isDown("right") and love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("up")
+	local up = love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left")
 	local down = love.keyboard.isDown("down")
-	local up = love.keyboard.isDown("up")
-	local left = love.keyboard.isDown("left")
-	local right = love.keyboard.isDown("right")
+	local space = love.keyboard.isDown(" ")
 
 	if sprite.state == "idle" then
 
-		if down then
-			crouch(sprite)
-		elseif up then
-			init_jump(sprite, "neutral")
-		elseif left then
+		if left then
 			walk(sprite, "left")
+		elseif left_up then
+			init_jump(sprite, "left")
+		elseif left_down then
+			crouch(cammy)
 		elseif right then
 			walk(sprite, "right")
+		elseif right_up then
+			init_jump(sprite, "right")
+		elseif right_down then
+			crouch(sprite)
+		elseif down then
+			crouch(sprite)
+		elseif up then -- up must come after direction, as they modify up
+			init_jump(sprite, "neutral")
+		elseif space then
+			jab(sprite, "standing")
 		end
 
 	elseif sprite.state == "walk_forward" then
@@ -31,6 +46,9 @@ function update(sprite)
 			walk(sprite, "right")
 		else
 			sprite:set_state("idle")
+		end
+		if space then
+			jab(sprite, "standing")
 		end
 
 	elseif sprite.state == "walk_backward" then
@@ -65,10 +83,14 @@ function update(sprite)
 		jump(sprite)
 	elseif sprite.state == "forward_jump" then
 		jump(sprite)
-		sprite.x = sprite.x + sprite.speed
+		sprite.x = sprite.x + sprite.speed + 1
 	elseif sprite.state == "backward_jump" then
 		jump(sprite)
-		sprite.x = sprite.x - sprite.speed
+		sprite.x = sprite.x - sprite.speed + 1
+	elseif sprite.state == "sjab" then
+		if sprite.frame == 3 then
+			sprite:set_state("idle")
+		end
 	end
 
 end
@@ -133,14 +155,20 @@ function init_jump(sprite, direction)
 			sprite:set_state("backward_jump")
 		end
 	end
+end
 
-	function jump(sprite)
-		if sprite.y - sprite.dy >= 0 then
-			sprite.y = 0
-			sprite:set_state("idle")
-		else
-			sprite.y = sprite.y - sprite.dy
-			sprite.dy = sprite.dy - .9
-		end
+function jump(sprite)
+	if sprite.y - sprite.dy >= 0 then
+		sprite.y = 0
+		sprite:set_state("idle")
+	else
+		sprite.y = sprite.y - sprite.dy
+		sprite.dy = sprite.dy - sprite.g
+	end
+end
+
+function jab(sprite, position)
+	if sprite.state ~= "sjab" then
+		sprite:set_state("sjab")
 	end
 end
