@@ -1,30 +1,20 @@
 module(..., package.seeall)
 
 function walk(sprite, direction)
-	if direction == "right" then
-		if sprite.state == "idle" or "walk_forward" or "walk_backward" then
-			if sprite.state ~= "walk_forward" then
-				sprite.frame = 0
-				sprite.state = "walk_forward"
-			end
+	if sprite.state == "idle" or "walk_forward" or "walk_backward" then
+		if sprite.state ~= direction then
+			sprite.frame = 0
+			sprite.state = direction
+		end
+		if direction == "walk_forward" then
 			if sprite.x < 650 - 104 then
-				sprite.x = sprite.x + 7
+				sprite.x = sprite.x + 8
 			end
-			sprite.active = true
-		end
-	elseif direction == "left" then
-		if sprite.state == "idle" or "walk_forward" or "walk_backward" then
-			if sprite.state ~= "walk_backward" then
-				sprite.frame = 0
-				sprite.state = "walk_backward"
-			end
+		elseif direction == "walk_backward" then
 			if sprite.x > 0 then
-				sprite.x = sprite.x - 7
+				sprite.x = sprite.x - 8
 			end
-			sprite.active = true
 		end
-	else
-		sprite.active = false
 	end
 end
 
@@ -37,6 +27,10 @@ end
 
 function jump(sprite, direction)
 	if direction == "neutral" then
+		if sprite.state ~= "neutral_jump" then
+			sprite.frame = 1
+			sprite.state = "neutral_jump"
+		end
 		print("neutral jump")
 	elseif direction == "right" then
 		print("jump right")
