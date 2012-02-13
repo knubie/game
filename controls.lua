@@ -1,40 +1,146 @@
 module(..., package.seeall)
 
-function walk(sprite, direction)
-	if sprite.state == "idle" or "walk_forward" or "walk_backward" then
-		if sprite.state ~= direction then
-			sprite.frame = 0
-			sprite.state = direction
+function update(sprite)
+
+	local down = love.keyboard.isDown("down")
+	local up = love.keyboard.isDown("up")
+	local left = love.keyboard.isDown("left")
+	local right = love.keyboard.isDown("right")
+
+	if sprite.state == "idle" then
+
+		if down then
+			crouch(sprite)
+		elseif up then
+			init_jump(sprite, "neutral")
+		elseif left then
+			walk(sprite, "left")
+		elseif right then
+			walk(sprite, "right")
 		end
-		if direction == "walk_forward" then
-			if sprite.x < 650 - 104 then
-				sprite.x = sprite.x + 8
-			end
-		elseif direction == "walk_backward" then
-			if sprite.x > 0 then
-				sprite.x = sprite.x - 8
-			end
+
+	elseif sprite.state == "walk_forward" then
+
+		if down then
+			crouch(sprite)
+		elseif up then
+			init_jump(sprite, "right")
+		elseif left then
+			walk(sprite, "left")
+		elseif right then
+			walk(sprite, "right")
+		else
+			sprite:set_state("idle")
+		end
+
+	elseif sprite.state == "walk_backward" then
+
+		if down then
+			crouch(sprite)
+		elseif up then
+			init_jump(sprite, "left")
+		elseif left then
+			walk(sprite, "left")
+		elseif right then
+			walk(sprite, "right")
+		else
+			sprite:set_state("idle")
+		end
+
+	elseif sprite.state == "crouch" then
+
+		if down then
+			crouch(sprite)
+		elseif up then
+			init_jump(sprite, "neutral")
+		elseif left then
+			walk(sprite, "left")
+		elseif right then
+			walk(sprite, "right")
+		else
+			sprite:set_state("idle")
+		end
+
+	elseif sprite.state == "neutral_jump" then
+		jump(sprite)
+	elseif sprite.state == "forward_jump" then
+		jump(sprite)
+		sprite.x = sprite.x + sprite.speed
+	elseif sprite.state == "backward_jump" then
+		jump(sprite)
+		sprite.x = sprite.x - sprite.speed
+	end
+
+end
+
+function walk(sprite, direction)
+	-- local state = "idle"
+
+	-- if sprite.facing == "right" then
+	-- 	if direction == "right" then
+	-- 		state = "walk_forward"
+	-- 	elseif direction == "left" then
+	-- 		state = "walk_backward"
+	-- 	end
+	-- elseif sprite.facing == "left" then
+	-- 	if direction == "right" then
+	-- 		state = "walk_backward"
+	-- 	elseif direction == "left" then
+	-- 		state = "walk_forward"
+	-- 	end
+	-- end
+	local state = ""
+	if direction == "right" then
+		state = "walk_forward"
+	elseif direction == "left" then
+		state = "walk_backward"
+	end
+
+	if sprite.state ~= state then
+		sprite:set_state(state)
+	end
+	if direction == "right" then
+		if sprite.x < 650 - 50 then
+			sprite.x = sprite.x + sprite.speed
+		end
+	elseif direction == "left" then
+		if sprite.x > 50 then
+			sprite.x = sprite.x - sprite.speed
 		end
 	end
 end
 
 function crouch(sprite)
 	if sprite.state ~= "crouch" then
-		sprite.state = "crouch"
-		sprite.frame = 0
+		sprite:set_state("crouch")
 	end
 end
 
-function jump(sprite, direction)
+function init_jump(sprite, direction)
 	if direction == "neutral" then
 		if sprite.state ~= "neutral_jump" then
-			sprite.frame = 1
-			sprite.state = "neutral_jump"
+			sprite.dy = sprite.jumpv
+			sprite:set_state("neutral_jump")
 		end
-		print("neutral jump")
 	elseif direction == "right" then
-		print("jump right")
+		if sprite.state ~= "forward_jump" then
+			sprite.dy = sprite.jumpv
+			sprite:set_state("forward_jump")
+		end
 	elseif direction == "left" then
-		print("jump left")
+		if sprite.state ~= "backward_jump" then
+			sprite.dy = sprite.jumpv
+			sprite:set_state("backward_jump")
+		end
+	end
+
+	function jump(sprite)
+		if sprite.y - sprite.dy >= 0 then
+			sprite.y = 0
+			sprite:set_state("idle")
+		else
+			sprite.y = sprite.y - sprite.dy
+			sprite.dy = sprite.dy - .9
+		end
 	end
 end
