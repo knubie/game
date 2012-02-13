@@ -19,7 +19,7 @@ local space = love.keyboard.isDown(" ")
 		elseif left_up then
 			init_jump(sprite, "left")
 		elseif left_down then
-			crouch(cammy)
+			crouch(sprite)
 		elseif right then
 			walk(sprite, "right")
 		elseif right_up then
@@ -83,10 +83,10 @@ local space = love.keyboard.isDown(" ")
 		jump(sprite)
 	elseif sprite.state == "forward_jump" then
 		jump(sprite)
-		sprite.x = sprite.x + sprite.speed + 1
+		sprite.x = sprite.x + sprite.speed + 2
 	elseif sprite.state == "backward_jump" then
 		jump(sprite)
-		sprite.x = sprite.x - sprite.speed + 1
+		sprite.x = sprite.x - (sprite.speed + 2)
 	elseif sprite.state == "sjab" then
 		if sprite.frame == 3 then
 			sprite:set_state("idle")
