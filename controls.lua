@@ -2,15 +2,15 @@ module(..., package.seeall)
 
 function update(sprite)
 
-	local left = love.keyboard.isDown("left") and not love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
-	local left_up = love.keyboard.isDown("left") and love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
-	local left_down = love.keyboard.isDown("left") and love.keyboard.isDown("down") and not love.keyboard.isDown("right") and not love.keyboard.isDown("up")
-	local right = love.keyboard.isDown("right") and not love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
-	local right_up = love.keyboard.isDown("right") and love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
-	local right_down = love.keyboard.isDown("right") and love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("up")
-	local up = love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left")
-	local down = love.keyboard.isDown("down")
-	local space = love.keyboard.isDown(" ")
+local left = love.keyboard.isDown("left") and not love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+local left_up = love.keyboard.isDown("left") and love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+local left_down = love.keyboard.isDown("left") and love.keyboard.isDown("down") and not love.keyboard.isDown("right") and not love.keyboard.isDown("up")
+local right = love.keyboard.isDown("right") and not love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+local right_up = love.keyboard.isDown("right") and love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+local right_down = love.keyboard.isDown("right") and love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("up")
+local up = love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left")
+local down = love.keyboard.isDown("down")
+local space = love.keyboard.isDown(" ")	
 
 	if sprite.state == "idle" then
 
@@ -28,9 +28,9 @@ function update(sprite)
 			crouch(sprite)
 		elseif down then
 			crouch(sprite)
-		elseif up then -- up must come after direction, as they modify up
+		elseif up then
 			init_jump(sprite, "neutral")
-		elseif space then
+		elseif love.keyboard.isDown(" ") then
 			jab(sprite, "standing")
 		end
 
@@ -96,21 +96,6 @@ function update(sprite)
 end
 
 function walk(sprite, direction)
-	-- local state = "idle"
-
-	-- if sprite.facing == "right" then
-	-- 	if direction == "right" then
-	-- 		state = "walk_forward"
-	-- 	elseif direction == "left" then
-	-- 		state = "walk_backward"
-	-- 	end
-	-- elseif sprite.facing == "left" then
-	-- 	if direction == "right" then
-	-- 		state = "walk_backward"
-	-- 	elseif direction == "left" then
-	-- 		state = "walk_forward"
-	-- 	end
-	-- end
 	local state = ""
 	if direction == "right" then
 		state = "walk_forward"
