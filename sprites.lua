@@ -1,6 +1,7 @@
 module(..., package.seeall)
+require('states')
 
-local sheets = {}
+sheets = {}
 
 function new (src)
 	table.insert(sheets, {
@@ -62,6 +63,12 @@ function new (src)
 		love.graphics.drawq(sheet.img, quad, self.x-math.floor(state.width/2), 650-state.height+self.y)
 	end
 
+	function sprite:hittable_box ()
+		local sheet = sheets[self.sheet_id]
+		local state = sheet.states[self.state]
+		return "line", self.x-math.floor(state.width/2), 650-state.height+self.y, state.width, state.height
+	end
+
 	function sprite:animate ()
 		local last_frame = #sheets[self.sheet_id].states[self.state].frames
 		if self.frame < last_frame then -- if not at last frame, increment
@@ -76,8 +83,10 @@ function new (src)
 	end
 
 	function sprite:set_state (state_name)
-		self.frame = 1
-		self.state = state_name
+		if self.state ~= state_name then
+			self.frame = 1
+			self.state = state_name
+		end
 	end
 
 	function sprite:set_face ()
@@ -87,34 +96,20 @@ function new (src)
 	end
 
 	function sprite:crouch()
-		if self.state ~= "crouch" then
-			self:set_state("crouch")
-		end
+		self:set_state("crouch")
 	end
 
 	return sprite
 end
 
-local cammy_states = {
-	-- name, width, height, y, x(frames)
-	{"idle", 78, 93, 482, {70,160,248,334,421,503}},
-	{"walk_forward", 75, 104, 587, {74,152,231,309,389,468,551,631,708,788}},
-	{"walk_backward", 79, 106, 715, {92, 172, 257, 355, 452, 557, 662, 769, 874, 978}},
-	{"crouch", 78, 89, 840, {96, 187, 270}},
-	{"neutral_jump", 65, 152, 942, {92, 162, 236, 305, 379, 453, 524}},
-	{"forward_jump", 122, 113, 1182, {94,223,366,506,645,782,912}},
-	{"backward_jump", 122, 113, 1182, {912,782,645,506,366,223,94}},
-	{"sjab", 119, 96, 1631, {109,230,109}}
-} 
-
 p1 = new('assets/cammy.png')
-p1:init_states(cammy_states)
+p1:init_states(states.cammy)
 p1.speed = 5
 p1.jumpv = 30
 p1.g = 3.9
 
 p2 = new('assets/cammy.png')
-p2:init_states(cammy_states)
+p2:init_states(states.cammy)
 p2.x = 400
 p2.speed = 5
 p2.jumpv = 30

@@ -50,20 +50,28 @@ function update(sprite)
 
 		if left then
 			walk(sprite, "left")
+
 		elseif left_up then
 			init_jump(sprite, "left")
+
 		elseif left_down then
 			sprite:crouch()
+
 		elseif right then
 			walk(sprite, "right")
+
 		elseif right_up then
 			init_jump(sprite, "right")
+
 		elseif right_down then
 			sprite:crouch()
+
 		elseif down then
 			sprite:crouch()
+
 		elseif up then
 			init_jump(sprite, "neutral")
+			
 		elseif jabb then
 			jab(sprite, "standing")
 		end
@@ -157,9 +165,8 @@ function walk(sprite, direction)
 		state = "walk_forward"
 	end
 
-	if sprite.state ~= state then
-		sprite:set_state(state)
-	end
+	sprite:set_state(state)
+
 	if direction == "right" then
 		if sprite.x < 650 - 50 then
 			sprite.x = sprite.x + sprite.speed
@@ -205,7 +212,5 @@ function jump(sprite)
 end
 
 function jab(sprite, position)
-	if sprite.state ~= "sjab" then
-		sprite:set_state("sjab")
-	end
+	sprite:set_state("sjab")
 end
