@@ -1,6 +1,6 @@
 module(..., package.seeall)
 cammy = {
-	-- name, width, height, y, x(frames)
+	-- name, width, height, y, frames{{x, hittable_box{x,y,w,h}}..}
 	{"idle", 78, 93, 482, {70,160,248,334,421,503}},
 	{"walk_forward", 75, 104, 587, {74,152,231,309,389,468,551,631,708,788}},
 	{"walk_backward", 79, 106, 715, {92, 172, 257, 355, 452, 557, 662, 769, 874, 978}},

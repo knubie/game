@@ -183,16 +183,18 @@ function init_jump(sprite, direction)
 	local state = ""
 	if direction == "right" and sprite.facing == "right" then
 		state = "forward_jump"
-		sprite.jumpx = sprite.speed + 2
+		sprite.jumpx = sprite.speed + 2.5
 	elseif direction == "right" and sprite.facing == "left" then
 		state = "backward_jump"
-		sprite.jumpx = sprite.speed + 2
+		sprite.jumpx = sprite.speed + 2.5
 	elseif direction == "left" and sprite.facing == "right" then
 		state = "backward_jump"
-		sprite.jumpx = 0 - (sprite.speed + 2)
+		sprite.jumpx = 0 - (sprite.speed + 2.5)
 	elseif direction == "left" and sprite.facing == "left" then
 		state = "forward_jump"
-		sprite.jumpx = 0 - (sprite.speed + 2)
+		sprite.jumpx = 0 - (sprite.speed + 2.5)
+	else
+		state = "neutral_jump"
 	end
 
 	if sprite.state ~= state then

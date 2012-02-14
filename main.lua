@@ -27,7 +27,7 @@ function love.draw()
 	sprites.p1:draw()
 	sprites.p2:draw()
 
-	love.graphics.rectangle(sprites.p1:hittable_box())
+	-- love.graphics.rectangle(sprites.p1:hittable_box())
 
 	local cur_time = love.timer.getMicroTime()
    if next_time <= cur_time then

@@ -37,7 +37,8 @@ function new (src)
 				width = w,
 				height = h,
 				y = y,
-				frames = {}
+				frames = {},
+				hittable_box = {}
 			}
 			for i,v in ipairs(frames) do
 				sheet.states[state_name].frames[i] = v
@@ -60,7 +61,7 @@ function new (src)
 		if self.facing == "left" then
 			quad:flip(true, false)
 		end
-		love.graphics.drawq(sheet.img, quad, self.x-math.floor(state.width/2), 650-state.height+self.y)
+		love.graphics.drawq(sheet.img, quad, self.x, 650-state.height+self.y)
 	end
 
 	function sprite:hittable_box ()
@@ -112,7 +113,7 @@ p2 = new('assets/cammy.png')
 p2:init_states(states.cammy)
 p2.x = 400
 p2.speed = 5
-p2.jumpv = 30
+p2.jumpv = 28
 p2.g = 3.9
 p2.facing = "left"
 p2.up = "w"
