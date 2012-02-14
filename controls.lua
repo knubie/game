@@ -2,16 +2,22 @@ module(..., package.seeall)
 
 function update(sprite)
 
-local left = love.keyboard.isDown("left") and not love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
-local left_up = love.keyboard.isDown("left") and love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
-local left_down = love.keyboard.isDown("left") and love.keyboard.isDown("down") and not love.keyboard.isDown("right") and not love.keyboard.isDown("up")
-local right = love.keyboard.isDown("right") and not love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
-local right_up = love.keyboard.isDown("right") and love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
-local right_down = love.keyboard.isDown("right") and love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("up")
-local up = love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left")
-local down = love.keyboard.isDown("down")
-local space = love.keyboard.isDown(" ")	
+local left = love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down)
+local left_up = love.keyboard.isDown(sprite.left) and love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down)
+local left_down = love.keyboard.isDown(sprite.left) and love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up)
+local right = love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.down)
+local right_up = love.keyboard.isDown(sprite.right) and love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.down)
+local right_down = love.keyboard.isDown(sprite.right) and love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.up)
+local up = love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.left)
+local down = love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left)
+local jab = love.keyboard.isDown(sprite.jab)	
 
+	if sprite.x < sprite.opponent.x then
+		sprite.facing = "right"
+	else
+		sprite.facing = "left"
+	end
+	
 	if sprite.state == "idle" then
 
 		if left then
@@ -19,25 +25,25 @@ local space = love.keyboard.isDown(" ")
 		elseif left_up then
 			init_jump(sprite, "left")
 		elseif left_down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif right then
 			walk(sprite, "right")
 		elseif right_up then
 			init_jump(sprite, "right")
 		elseif right_down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "neutral")
-		elseif love.keyboard.isDown(" ") then
+		elseif jab then
 			jab(sprite, "standing")
 		end
 
 	elseif sprite.state == "walk_forward" then
 
 		if down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "right")
 		elseif left then
@@ -54,7 +60,7 @@ local space = love.keyboard.isDown(" ")
 	elseif sprite.state == "walk_backward" then
 
 		if down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "left")
 		elseif left then
@@ -68,7 +74,7 @@ local space = love.keyboard.isDown(" ")
 	elseif sprite.state == "crouch" then
 
 		if down then
-			crouch(sprite)
+			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "neutral")
 		elseif left then
@@ -80,27 +86,39 @@ local space = love.keyboard.isDown(" ")
 		end
 
 	elseif sprite.state == "neutral_jump" then
+
 		jump(sprite)
+
 	elseif sprite.state == "forward_jump" then
+
 		jump(sprite)
 		sprite.x = sprite.x + sprite.speed + 2
+
 	elseif sprite.state == "backward_jump" then
+
 		jump(sprite)
 		sprite.x = sprite.x - (sprite.speed + 2)
+
 	elseif sprite.state == "sjab" then
+
 		if sprite.frame == 3 then
 			sprite:set_state("idle")
 		end
+
 	end
 
 end
 
 function walk(sprite, direction)
 	local state = ""
-	if direction == "right" then
+	if direction == "right" and sprite.facing == "right" then
 		state = "walk_forward"
-	elseif direction == "left" then
+	elseif direction == "right" and sprite.facing == "left" then
 		state = "walk_backward"
+	elseif direction == "left" and sprite.facing == "right" then
+		state = "walk_backward"
+	elseif direction == "left" and sprite.facing == "left" then
+		state = "walk_forward"
 	end
 
 	if sprite.state ~= state then
@@ -114,12 +132,6 @@ function walk(sprite, direction)
 		if sprite.x > 50 then
 			sprite.x = sprite.x - sprite.speed
 		end
-	end
-end
-
-function crouch(sprite)
-	if sprite.state ~= "crouch" then
-		sprite:set_state("crouch")
 	end
 end
 

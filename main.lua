@@ -12,17 +12,20 @@ end
 function love.update(dt)
 	print(love.timer.getFPS())
 	next_time = next_time + min_dt
-	controls.update(sprites.cammy)
+	controls.update(sprites.p1)
+	controls.update(sprites.p2)
 	if i == 2 then
 		i = 0
-		sprites.cammy:animate()
+		sprites.p1:animate()
+		sprites.p2:animate()
 	else
 		i = i + 1
 	end
 end
 
 function love.draw()
-	sprites.cammy:draw()
+	sprites.p1:draw()
+	sprites.p2:draw()
 
 	local cur_time = love.timer.getMicroTime()
    if next_time <= cur_time then

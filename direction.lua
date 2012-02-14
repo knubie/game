@@ -1,0 +1,12 @@
+module(..., package.seeall)
+function direction ()
+	local left = love.keyboard.isDown("left") and not love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+	local left_up = love.keyboard.isDown("left") and love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down")
+	local left_down = love.keyboard.isDown("left") and love.keyboard.isDown("down") and not love.keyboard.isDown("right") and not love.keyboard.isDown("up")
+	local right = love.keyboard.isDown("right") and not love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+	local right_up = love.keyboard.isDown("right") and love.keyboard.isDown("up") and not love.keyboard.isDown("left") and not love.keyboard.isDown("down")
+	local right_down = love.keyboard.isDown("right") and love.keyboard.isDown("down") and not love.keyboard.isDown("left") and not love.keyboard.isDown("up")
+	local up = love.keyboard.isDown("up") and not love.keyboard.isDown("right") and not love.keyboard.isDown("down") and not love.keyboard.isDown("left")
+	local down = love.keyboard.isDown("down")
+	local space = love.keyboard.isDown(" ")	
+end
