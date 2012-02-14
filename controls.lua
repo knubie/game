@@ -2,22 +2,50 @@ module(..., package.seeall)
 
 function update(sprite)
 
-local left = love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down)
-local left_up = love.keyboard.isDown(sprite.left) and love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down)
-local left_down = love.keyboard.isDown(sprite.left) and love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up)
-local right = love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.down)
-local right_up = love.keyboard.isDown(sprite.right) and love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.down)
-local right_down = love.keyboard.isDown(sprite.right) and love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.left) and not love.keyboard.isDown(sprite.up)
-local up = love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.left)
-local down = love.keyboard.isDown(sprite.down) and not love.keyboard.isDown(sprite.right) and not love.keyboard.isDown(sprite.up) and not love.keyboard.isDown(sprite.left)
-local jab = love.keyboard.isDown(sprite.jab)	
+	local left = love.keyboard.isDown(sprite.left)
+								and not love.keyboard.isDown(sprite.up)
+								and not love.keyboard.isDown(sprite.right)
+								and not love.keyboard.isDown(sprite.down)
 
-	if sprite.x < sprite.opponent.x then
-		sprite.facing = "right"
-	else
-		sprite.facing = "left"
-	end
-	
+	local left_up = love.keyboard.isDown(sprite.left)
+									and love.keyboard.isDown(sprite.up)
+									and not love.keyboard.isDown(sprite.right)
+									and not love.keyboard.isDown(sprite.down)
+
+	local left_down = love.keyboard.isDown(sprite.left)
+										and love.keyboard.isDown(sprite.down)
+										and not love.keyboard.isDown(sprite.right)
+										and not love.keyboard.isDown(sprite.up)
+
+	local right = love.keyboard.isDown(sprite.right)
+								and not love.keyboard.isDown(sprite.up)
+								and not love.keyboard.isDown(sprite.left)
+								and not love.keyboard.isDown(sprite.down)
+
+	local right_up = love.keyboard.isDown(sprite.right)
+										and love.keyboard.isDown(sprite.up)
+										and not love.keyboard.isDown(sprite.left)
+										and not love.keyboard.isDown(sprite.down)
+
+	local right_down = love.keyboard.isDown(sprite.right)
+											and love.keyboard.isDown(sprite.down)
+											and not love.keyboard.isDown(sprite.left)
+											and not love.keyboard.isDown(sprite.up)
+
+	local up = love.keyboard.isDown(sprite.up)
+							and not love.keyboard.isDown(sprite.right)
+							and not love.keyboard.isDown(sprite.down)
+							and not love.keyboard.isDown(sprite.left)
+
+	local down = love.keyboard.isDown(sprite.down)
+								and not love.keyboard.isDown(sprite.right)
+								and not love.keyboard.isDown(sprite.up)
+								and not love.keyboard.isDown(sprite.left)
+
+	local jabb = love.keyboard.isDown(sprite.jab)	
+
+	sprite:set_face()
+
 	if sprite.state == "idle" then
 
 		if left then
@@ -36,7 +64,7 @@ local jab = love.keyboard.isDown(sprite.jab)
 			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "neutral")
-		elseif jab then
+		elseif jabb then
 			jab(sprite, "standing")
 		end
 
@@ -75,10 +103,18 @@ local jab = love.keyboard.isDown(sprite.jab)
 
 		if down then
 			sprite:crouch()
+		elseif left_down then
+			sprite:crouch()
+		elseif right_down then
+			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "neutral")
 		elseif left then
 			walk(sprite, "left")
+		elseif left_up then
+			init_jump(sprite, "left")
+		elseif right_up then
+			init_jump(sprite, "right")
 		elseif right then
 			walk(sprite, "right")
 		else
@@ -92,12 +128,12 @@ local jab = love.keyboard.isDown(sprite.jab)
 	elseif sprite.state == "forward_jump" then
 
 		jump(sprite)
-		sprite.x = sprite.x + sprite.speed + 2
+		sprite.x = sprite.x + sprite.jumpx
 
 	elseif sprite.state == "backward_jump" then
 
 		jump(sprite)
-		sprite.x = sprite.x - (sprite.speed + 2)
+		sprite.x = sprite.x + sprite.jumpx
 
 	elseif sprite.state == "sjab" then
 
@@ -136,21 +172,25 @@ function walk(sprite, direction)
 end
 
 function init_jump(sprite, direction)
-	if direction == "neutral" then
-		if sprite.state ~= "neutral_jump" then
-			sprite.dy = sprite.jumpv
-			sprite:set_state("neutral_jump")
-		end
-	elseif direction == "right" then
-		if sprite.state ~= "forward_jump" then
-			sprite.dy = sprite.jumpv
-			sprite:set_state("forward_jump")
-		end
-	elseif direction == "left" then
-		if sprite.state ~= "backward_jump" then
-			sprite.dy = sprite.jumpv
-			sprite:set_state("backward_jump")
-		end
+
+	local state = ""
+	if direction == "right" and sprite.facing == "right" then
+		state = "forward_jump"
+		sprite.jumpx = sprite.speed + 2
+	elseif direction == "right" and sprite.facing == "left" then
+		state = "backward_jump"
+		sprite.jumpx = sprite.speed + 2
+	elseif direction == "left" and sprite.facing == "right" then
+		state = "backward_jump"
+		sprite.jumpx = 0 - (sprite.speed + 2)
+	elseif direction == "left" and sprite.facing == "left" then
+		state = "forward_jump"
+		sprite.jumpx = 0 - (sprite.speed + 2)
+	end
+
+	if sprite.state ~= state then
+		sprite.dy = sprite.jumpv
+		sprite:set_state(state)
 	end
 end
 
