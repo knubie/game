@@ -67,7 +67,7 @@ function new (src)
 	function sprite:hittable_box ()
 		local sheet = sheets[self.sheet_id]
 		local state = sheet.states[self.state]
-		return "line", self.x-math.floor(state.width/2), 650-state.height+self.y, state.width, state.height
+		return "line", self.x, 650-state.height+self.y, state.width, state.height
 	end
 
 	function sprite:animate ()
@@ -94,6 +94,42 @@ function new (src)
 		if self.state ~= "neutral_jump" and self.state ~= "forward_jump" and self.state ~= "backward_jump" then
 			if self.x < self.opponent.x then self.facing = "right" else self.facing = "left" end
 		end
+	end
+
+	function sprite:get_width ()
+		local sheet = sheets[self.sheet_id]
+		local state = sheet.states[self.state]
+		return state.width
+	end
+
+	function sprite:get_height ()
+		local sheet = sheets[self.sheet_id]
+		local state = sheet.states[self.state]
+		return state.height
+	end
+
+	function sprite:left_side ()
+		return self.x
+	end
+
+	function sprite:right_side ()
+		return self.x + self:get_width()
+	end
+
+	function sprite:bottom ()
+		return 650+self.y
+	end
+
+	function sprite:top ()
+		return 650-self:get_height()+self.y
+	end
+
+	function sprite:is_on_left ()
+		return self.x < self.opponent.x
+	end
+
+	function sprite:is_on_right ()
+		return self.x > self.opponent.x
 	end
 
 	function sprite:crouch()

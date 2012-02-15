@@ -2,6 +2,18 @@ module(..., package.seeall)
 
 function update(sprite)
 
+	if sprite:right_side() > sprite.opponent:left_side() and sprite:bottom() > sprite.opponent:top() and sprite:top() < sprite.opponent:bottom() and sprite:is_on_left() then
+		print('collision facing right')
+		sprite.x = sprite.x - sprite.speed/2
+		sprite.opponent.x = sprite.opponent.x + sprite.speed/2
+	elseif sprite:is_on_right() and sprite.opponent:right_side() > sprite:left_side() and sprite:bottom() > sprite.opponent:top() and sprite:top() < sprite.opponent:bottom() then
+		print('collision facing left')
+		sprite.x = sprite.x + sprite.speed/2
+		sprite.opponent.x = sprite.opponent.x - sprite.speed/2
+	end
+
+	-- TODO: use force to calculate pushback (mass and velocity)
+
 	local left = love.keyboard.isDown(sprite.left)
 								and not love.keyboard.isDown(sprite.up)
 								and not love.keyboard.isDown(sprite.right)
