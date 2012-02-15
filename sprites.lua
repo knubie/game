@@ -64,11 +64,6 @@ function new (src)
 		love.graphics.drawq(sheet.img, quad, self.x, 650-state.height+self.y)
 	end
 
-	function sprite:hittable_box ()
-		local sheet = sheets[self.sheet_id]
-		local state = sheet.states[self.state]
-		return "line", self.x, 650-state.height+self.y, state.width, state.height
-	end
 
 	function sprite:animate ()
 		local last_frame = #sheets[self.sheet_id].states[self.state].frames
@@ -108,20 +103,24 @@ function new (src)
 		return state.height
 	end
 
-	function sprite:left_side ()
-		return self.x
+	function sprite:blue_box ()
+		return "line", self.x+18, 650-self:get_height()+self.y+2, 40, 89
 	end
 
-	function sprite:right_side ()
-		return self.x + self:get_width()
+	function sprite:left_side (line, left, top, width, height)
+		return left
 	end
 
-	function sprite:bottom ()
-		return 650+self.y
+	function sprite:right_side (line, left, top, width, height)
+		return left + width
 	end
 
-	function sprite:top ()
-		return 650-self:get_height()+self.y
+	function sprite:bottom (line, left, top, width, height)
+		return top+height
+	end
+
+	function sprite:top (line, left, top, width, height)
+		return top
 	end
 
 	function sprite:is_on_left ()

@@ -1,8 +1,9 @@
 require('sprites')
 require('controls')
+require('collisions')
 
 function love.load()
-	min_dt = 1/10
+	min_dt = 1/30
 	next_time = love.timer.getMicroTime()
 	love.graphics.setMode(650, 650, false, true, 0)
 	-- love.graphics.setBackgroundColor(255, 255, 255)
@@ -14,6 +15,8 @@ function love.update(dt)
 	next_time = next_time + min_dt
 	controls.update(sprites.p1)
 	controls.update(sprites.p2)
+	collisions.update(sprites.p1)
+	collisions.update(sprites.p2)
 
 
 	if i == 2 then
@@ -29,8 +32,9 @@ function love.draw()
 	sprites.p1:draw()
 	sprites.p2:draw()
 
-	-- love.graphics.rectangle(sprites.p1:hittable_box())
-	-- love.graphics.rectangle(sprites.p2:hittable_box())
+	-- love.graphics.rectangle(sprites.p1:blue_box())
+	-- love.graphics.rectangle(sprites.p2:blue_box())
+	-- love.graphics.rectangle("line", 400, 0, 1, 650)
 
 	local cur_time = love.timer.getMicroTime()
    if next_time <= cur_time then
