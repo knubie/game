@@ -52,21 +52,21 @@ function update (sprite)
 	if sprite.state == "idle" then
 
 		if up then
-			idle.up(sprite)
+			sprite:init_jump("neutral")
 		elseif right_up then
-			idle.right_up(sprite)
+			sprite:init_jump("right")
 		elseif right then
-			idle.right(sprite)
+			sprite:walk("right")
 		elseif right_down then
-			idle.right_down(sprite)
+			sprite:crouch()
 		elseif down then
-			idle.down(sprite)
+			sprite:crouch()
 		elseif left_down then
-			idle.left_down(sprite)
+			sprite:crouch()
 		elseif left then
-			idle.left(sprite)
+			sprite:walk("left")
 		elseif left_up then
-			idle.left_up(sprite)
+			sprite:init_jump("left")
 		elseif jabb then
 			jab(sprite, "standing")
 		end
