@@ -1,5 +1,4 @@
 module(..., package.seeall)
-require("states/idle")
 
 function update (sprite)
 

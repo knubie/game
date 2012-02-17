@@ -46,8 +46,4 @@ function update (sprite)
 		end
 	end
 
-	-- for each hitbox in sprite.curr_hitboxes
-		-- for each foe_hitbox in foe.curr_hitboxes
-			-- if touching
-				-- slow down
 end
