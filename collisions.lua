@@ -1,21 +1,53 @@
 module(..., package.seeall)
 
 function update (sprite)
-	if sprite.facing == "right" then
-		print("facing right =============")
-		print(sprite:right_side(sprite:blue_box()))
-		print(sprite.x)
-	elseif sprite.facing == "left" then
-		print("facing left =============")
-		print(sprite:left_side(sprite:blue_box()))
-		print(sprite.x)
+
+	local foe = sprite.foe
+
+	local function checkCollision(sprite, foe)
+
+		ax1,ay1,aw,ah = sprite:blue_box()
+		bx1,by1,bw,bh = foe:blue_box()
+
+		local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+		return ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1
 	end
 
-	if sprite:right_side(sprite:blue_box()) > sprite.opponent:left_side(sprite.opponent:blue_box()) and sprite:bottom(sprite:blue_box()) > sprite.opponent:top(sprite.opponent:blue_box()) and sprite:top(sprite:blue_box()) < sprite.opponent:bottom(sprite.opponent:blue_box()) and sprite:is_on_left() then
-		sprite.x = sprite.x - sprite.speed/2
-		sprite.opponent.x = sprite.opponent.x + sprite.speed/2
-	elseif sprite:is_on_right() and sprite.opponent:right_side(sprite.opponent:blue_box()) > sprite:left_side(sprite:blue_box()) and sprite:bottom(sprite:blue_box()) > sprite.opponent:top(sprite.opponent:blue_box()) and sprite:top(sprite:blue_box()) < sprite.opponent:bottom(sprite.opponent:blue_box()) then
-		sprite.x = sprite.x + sprite.speed/2
-		sprite.opponent.x = sprite.opponent.x - sprite.speed/2
+	local function checkHit(sprite, foe)
+
+		ax1,ay1,aw,ah = sprite:red_box()
+		bx1,by1,bw,bh = foe:blue_box()
+
+		local ax2,ay2,bx2,by2 = ax1 + aw, ay1 + ah, bx1 + bw, by1 + bh
+		return ax1 < bx2 and ax2 > bx1 and ay1 < by2 and ay2 > by1
 	end
+
+	if checkHit(sprite, foe) then
+		if sprite.shake_frame > 0 then
+			if sprite.facing == "right" then
+				sprite.x = sprite.x - sprite.speed/2
+				foe.x = foe.x + sprite.speed/2
+			else
+				sprite.x = sprite.x + sprite.speed/2
+				foe.x = foe.x - sprite.speed/2
+			end
+		else
+			foe:set_state("light_hit")
+		end
+	end
+
+	if checkCollision(sprite, foe) then
+		if sprite.facing == "right" then
+			sprite.x = sprite.x - sprite.speed/2
+			foe.x = foe.x + sprite.speed/2
+		else
+			sprite.x = sprite.x + sprite.speed/2
+			foe.x = foe.x - sprite.speed/2
+		end
+	end
+
+	-- for each hitbox in sprite.curr_hitboxes
+		-- for each foe_hitbox in foe.curr_hitboxes
+			-- if touching
+				-- slow down
 end

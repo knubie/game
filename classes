@@ -1,0 +1,23 @@
+classes:
+	monk:
+		weapon: fists
+		fast, combo easily, high damage, short range
+		low defense, high hp
+	knight:
+		weapon: one handed sword/shield
+		mid damage, mid range, mid defense, mid hp
+	lancer:
+		weapon: lance
+		slow, high range, mid damage
+	black mage:
+		weapon: staff
+		low hp, low defense, high damage, slow, any range
+	white mage:
+		weapon: wand
+		low hp, low defense, low damage
+	ninja:
+		weapon: kunai/katana
+		low defense, mid hp, fast, good backdash
+	archer:
+		weapon: knife/bow/arrow
+		slow, high range, high damage, low defense, low damage close range knife attack
