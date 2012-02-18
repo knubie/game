@@ -3,7 +3,7 @@ module(..., package.seeall)
 --[[ TODO in the sprite sheet-- don't put space between sprite frames, only need to specify number of frames then
      TODO load all this data from a csv
      TODO dynamically load this data from  assets/classes/$class_name/$state_name.png ]]--
-y
+
 cammy = {
 	-- name,            width, height, y,    x of each frame
 	{  "idle",          78,    93,     482,  {70,160,248,334,421,503}},
