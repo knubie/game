@@ -28,6 +28,7 @@ function update (sprite)
 		sprite.red_box = {0,0,0,0}
 		foe.frame = 1
 		foe.shake_frame = 1
+		foe.push_back_frame = 1
 		sprite.hitting = true
 		foe:set_state("light_hit")
 		-- 	if sprite.facing == "right" then
