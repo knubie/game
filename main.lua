@@ -1,5 +1,5 @@
 require('sprites')
-require('direction')
+require('actions')
 require('collisions')
 
 function love.load()
@@ -14,8 +14,8 @@ function love.update(dt)
 	-- print(love.timer.getFPS())
 	next_time = next_time + min_dt
 
-	direction.update(sprites.p1)
-	direction.update(sprites.p2)
+	actions.update(sprites.p1)
+	actions.update(sprites.p2)
 	collisions.update(sprites.p1)
 	collisions.update(sprites.p2)
 
@@ -33,9 +33,7 @@ function love.draw()
 	sprites.p2:draw()
 
 	love.graphics.rectangle("line", sprites.p1:blue_box())
-	love.graphics.rectangle("line", sprites.p1:red_box())
 	love.graphics.rectangle("line", sprites.p2:blue_box())
-	love.graphics.rectangle("line", sprites.p2:red_box())
 	love.graphics.rectangle("line", sprites.p1.x, 0, 1, 650)
 	love.graphics.rectangle("line", sprites.p2.x, 0, 1, 650)
 	love.graphics.rectangle("line", 400, 0, 1, 650)

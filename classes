@@ -5,7 +5,7 @@ classes:
 		low defense, high hp
 	knight:
 		weapon: one handed sword/shield
-		mid damage, mid range, mid defense, mid hp
+		mid damage, mid range, mid defense, mid hp, doesn't take chip damage with shield
 	lancer:
 		weapon: lance
 		slow, high range, mid damage

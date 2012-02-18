@@ -9,6 +9,7 @@ local BLUE_BOX = {
 	height = 89
 }
 local CENTER = 40
+local SHAKE_DUR = 8
 
 sheets = {}
 
@@ -36,7 +37,11 @@ function new (src)
 		right = "right",
 		jab = " ",
 		foe = nil,
-		shake_frame = 0
+		shake_frame = 0,
+		push_back_frame = 0,
+		hitting = false,
+		blue_box = {},
+		red_box = {0,0,0,0}
 	}
 
 	function sprite:init_states (new_states)
@@ -76,26 +81,62 @@ function new (src)
 		end
 	end
 
-	function sprite:shake ()
-		print(self.shake_frame)
-		if self.shake_frame < 8 then
+	function sprite:hit (recovery_frames)
+
+		local function shake ()
 			if self.shake_frame%2 ~= 0 then
 				self.x = self.x+2
 			else
 				self.x = self.x-2
 			end
-			self.shake_frame = self.shake_frame + 1
-		else
-			self.shake_frame = 0
-			self:set_state("idle")
 		end
+
+		local function push_back ()
+			if self.facing == "left" then
+				print('go right')
+				self.x = self.x + 1
+			else
+				self.x = self.x - 1
+			end
+		end
+	-- 	while i < 10
+		if self.shake_frame < SHAKE_DUR then
+			shake()
+			self.shake_frame = self.shake_frame + 1
+	-- 		hold on first frame
+		else
+			self.foe.hitting = false
+			if self.push_back_frame < recovery_frames then
+				print('pushing back')
+				push_back()
+				self.push_back_frame = self.push_back_frame + 1
+			else
+				self.push_back_frame = 0
+				self.shake_frame = 0
+				self:set_state("idle")
+			end
+		end
+	-- 		recover(hit.for_recovery_frames)
+	-- 	end
+
+	-- 	function recover()
+	-- 		move back
+	-- 	end
+
 	end
 
 
+
 	function sprite:animate ()
+
 		local last_frame = #sheets[self.sheet_id].states[self.state].frames
-		if self.state == "sjab" and self.foe.state == "light_hit" and self.frame == 2 then
+
+		if self.shake_frame > 0 and self.shake_frame < SHAKE_DUR then
+			self.frame = 1
+
+		elseif self.hitting == true then
 			self.frame = 2
+
 		else
 			if self.frame < last_frame then -- if not at last frame, increment
 				self.frame = self.frame + 1
@@ -135,22 +176,10 @@ function new (src)
 	end
 
 	function sprite:blue_box ()
-		if sprite.facing == "right" then
+		if self.facing == "right" then
 			return self.x+BLUE_BOX.x-CENTER, GROUND-self:get_height()+self.y+BLUE_BOX.y, BLUE_BOX.width, BLUE_BOX.height
 		else
 			return self.x-BLUE_BOX.x-BLUE_BOX.width+CENTER, GROUND-self:get_height()+self.y+BLUE_BOX.y, BLUE_BOX.width, BLUE_BOX.height
-		end
-	end
-
-	function sprite:red_box ()
-		if self.state == "sjab" and self.frame == 2 then
-			if sprite.facing == "right" then
-				return self.x+82-CENTER, GROUND-self:get_height()+self.y+10, 38, 15
-			else
-				return self.x-82-38+CENTER, GROUND-self:get_height()+self.y+10, 38, 15
-			end
-		else
-			return 0,0,0,0
 		end
 	end
 
@@ -211,6 +240,18 @@ function new (src)
 
 	function sprite:jumping()
 		return self.state == "neutral_jump" or self.state == "forward_jump" or self.state == "backward_jump"
+	end
+
+	function sprite:sjab()
+		if self.frame == 2 and self.hitting == false then
+			if self.facing == "right" then
+				return self.x+82-CENTER, GROUND-self:get_height()+self.y+10, 38, 15
+			else
+				return self.x-82-38+CENTER, GROUND-self:get_height()+self.y+10, 38, 15
+			end
+		else
+			return 0,0,0,0
+		end
 	end
 
 	return sprite
