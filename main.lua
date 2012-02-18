@@ -32,11 +32,11 @@ function love.draw()
 	sprites.p1:draw()
 	sprites.p2:draw()
 
-	love.graphics.rectangle("line", sprites.p1:blue_box())
-	love.graphics.rectangle("line", sprites.p2:blue_box())
-	love.graphics.rectangle("line", sprites.p1.x, 0, 1, 650)
-	love.graphics.rectangle("line", sprites.p2.x, 0, 1, 650)
-	love.graphics.rectangle("line", 400, 0, 1, 650)
+	-- love.graphics.rectangle("line", sprites.p1:blue_box())
+	-- love.graphics.rectangle("line", sprites.p2:blue_box())
+	-- love.graphics.rectangle("line", sprites.p1.x, 0, 1, 650)
+	-- love.graphics.rectangle("line", sprites.p2.x, 0, 1, 650)
+	-- love.graphics.rectangle("line", 400, 0, 1, 650)
 
 	local cur_time = love.timer.getMicroTime()
    if next_time <= cur_time then
