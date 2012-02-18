@@ -1,3 +1,4 @@
+dofile('dumper.lua')
 require('sprites')
 require('actions')
 require('collisions')
