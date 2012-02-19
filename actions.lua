@@ -75,7 +75,7 @@ function update (sprite)
 		if down then
 			sprite:crouch()
 		elseif up then
-			init_jump(sprite, "right")
+			sprite:init_jump("right")
 		elseif left then
 			if jabb then
 				jab(sprite, "standing")
@@ -165,7 +165,8 @@ function jump(sprite)
 		sprite.y = sprite.y - sprite.dy
 		sprite.dy = sprite.dy - sprite.g
 	end
-		sprite.x = math.floor(sprite.x + sprite.jumpx)
+		sprite:movex(sprite.jumpx)
+		-- sprite.x = math.floor(sprite.x + sprite.jumpx)
 end
 
 function jab(sprite, position)

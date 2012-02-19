@@ -9,7 +9,7 @@ local BLUE_BOX = {
 	height = 89
 }
 local CENTER = 40
-local SHAKE_DUR = 7
+local SHAKE_DUR = 4
 
 sheets = {}
 
@@ -83,8 +83,11 @@ function new (src)
 	end
 
 	function sprite:movex(v)
+		print(self.x-CENTER)
 		if self.x-CENTER > 0 and self.x-CENTER+self:get_width() < 650 then
-			self.x = self.x+v
+			if self.x-CENTER+v > 0 and self.x-CENTER+self:get_width()+v < 650 then
+				self.x = self.x+v
+			end
 		end
 	end
 
@@ -151,7 +154,6 @@ function new (src)
 				else
 					if self.state == "sjab" then
 						self.state = "idle"
-						print('last frame')
 					end
 					self.hitting = false
 					self.frame = 1 -- start the state animation from the beginning
@@ -210,13 +212,9 @@ function new (src)
 		end
 
 		if direction == "right" then
-			if self.x < 650 - 50 then
-				self.jumpx = self.speed + 2.5
-			end
+			self.jumpx = self.speed + 2.5
 		elseif direction == "left" then
-			if self.x > 50 then
-				self.jumpx = 0 - (self.speed + 2.5)
-			end
+			self.jumpx = 0 - (self.speed + 2.5)
 		else
 			self.jumpx = 0
 		end
@@ -271,6 +269,7 @@ end
 
 p1 = new('assets/cammy.png')
 p1:init_states(states.cammy)
+p1.x = 300
 p1.speed = 5
 p1.jumpv = 23
 p1.g = 2.4

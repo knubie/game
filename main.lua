@@ -2,6 +2,7 @@ dofile('dumper.lua')
 require('sprites')
 require('actions')
 require('collisions')
+require('effects')
 
 function love.load()
 	min_dt = 1/30
@@ -27,6 +28,7 @@ function love.update(dt)
 		i = 0
 		sprites.p1:animate()
 		sprites.p2:animate()
+		effects.small_spark:animate()
 	else
 		i = i + 1
 	end
@@ -35,12 +37,14 @@ end
 function love.draw()
 	sprites.p1:draw()
 	sprites.p2:draw()
+	effects.small_spark:draw()
+	
 
 	-- love.graphics.rectangle("line", sprites.p1:blue_box())
+	-- love.graphics.rectangle("line", sprites.p1:sjab())
 	-- love.graphics.rectangle("line", sprites.p2:blue_box())
 	-- love.graphics.rectangle("line", sprites.p1.x, 0, 1, 650)
 	-- love.graphics.rectangle("line", sprites.p2.x, 0, 1, 650)
-	-- love.graphics.rectangle("line", 400, 0, 1, 650)
 
 	local cur_time = love.timer.getMicroTime()
    if next_time <= cur_time then

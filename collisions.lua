@@ -1,4 +1,5 @@
 module(..., package.seeall)
+require('effects')
 
 function update (sprite)
 
@@ -32,6 +33,13 @@ function update (sprite)
 			foe.push_back_frame = 0
 			sprite.hitting = true
 			foe:set_state("light_hit")
+			effects.small_spark.frame = 1
+			if sprite.facing == "right" then
+				effects.small_spark.x = sprite.red_box[1]+sprite.red_box[3]
+			else
+				effects.small_spark.x = sprite.red_box[1]
+			end
+			effects.small_spark.y = sprite.red_box[2]+(sprite.red_box[4]/2)
 		end
 		-- 	if sprite.facing == "right" then
 		-- 		sprite.x = sprite.x - sprite.speed/2
