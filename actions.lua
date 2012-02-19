@@ -77,26 +77,42 @@ function update (sprite)
 		elseif up then
 			init_jump(sprite, "right")
 		elseif left then
-			sprite:walk("left")
+			if jabb then
+				jab(sprite, "standing")
+			else
+				sprite:walk("left")
+			end
 		elseif right then
-			sprite:walk("right")
+			if jabb then
+				jab(sprite, "standing")
+			else
+				sprite:walk("right")
+			end
 		else
 			sprite:set_state("idle")
-		end
-		if space then
-			jab(sprite, "standing")
 		end
 
 	elseif sprite.state == "walk_backward" then
 
+		if jabb then
+			jab(sprite, "standing")
+		end
 		if down then
 			sprite:crouch()
 		elseif up then
 			init_jump(sprite, "left")
 		elseif left then
-			sprite:walk("left")
+			if jabb then
+				jab(sprite, "standing")
+			else
+				sprite:walk("left")
+			end
 		elseif right then
-			sprite:walk("right")
+			if jabb then
+				jab(sprite, "standing")
+			else
+				sprite:walk("right")
+			end
 		else
 			sprite:set_state("idle")
 		end

@@ -94,9 +94,9 @@ function new (src)
 		local function push_back ()
 			if self.facing == "left" then
 				print('go right')
-				self.x = self.x + 1
+				self.x = self.x + 3
 			else
-				self.x = self.x - 1
+				self.x = self.x - 3
 			end
 		end
 	-- 	while i < 10
