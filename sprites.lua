@@ -9,7 +9,7 @@ local BLUE_BOX = {
 	height = 89
 }
 local CENTER = 40
-local SHAKE_DUR = 8
+local SHAKE_DUR = 7
 
 sheets = {}
 
@@ -75,28 +75,43 @@ function new (src)
 		)
 		if self.facing == "left" then
 			quad:flip(true, false)
-			love.graphics.drawq(sheet.img, quad, self.x-state.width+CENTER, GROUND-state.height+self.y)
+			love.graphics.drawq(sheet.img, quad, self.x-state.width+CENTER, GROUND-self:get_height()+self.y)
 		else
-			love.graphics.drawq(sheet.img, quad, self.x-CENTER, GROUND-state.height+self.y)
+			love.graphics.drawq(sheet.img, quad, self.x-CENTER, GROUND-self:get_height()+self.y)
+		end
+	end
+
+	function sprite:movex(v)
+		if self.x-CENTER > 0 and self.x-CENTER+self:get_width() < 650 then
+			self.x = self.x+v
 		end
 	end
 
 	function sprite:hit (recovery_frames)
 
 		local function shake ()
+			print('shaking')
+			print('shake frame:')
+			print(self.shake_frame)
 			if self.shake_frame%2 ~= 0 then
-				self.x = self.x+2
+				self:movex(2)
+				-- self.x = self.x+2
 			else
-				self.x = self.x-2
+				self:movex(-2)
+				-- self.x = self.x-2
 			end
 		end
 
 		local function push_back ()
+			print('red_box:')
+			print(self.foe.red_box[1])
+			print('pushing back')
 			if self.facing == "left" then
-				print('go right')
-				self.x = self.x + 3
+				self:movex(3)
+				-- self.x = self.x + 3
 			else
-				self.x = self.x - 3
+				self:movex(-3)
+				-- self.x = self.x - 3
 			end
 		end
 	-- 	while i < 10
@@ -105,9 +120,7 @@ function new (src)
 			self.shake_frame = self.shake_frame + 1
 	-- 		hold on first frame
 		else
-			self.foe.hitting = false
 			if self.push_back_frame < recovery_frames then
-				print('pushing back')
 				push_back()
 				self.push_back_frame = self.push_back_frame + 1
 			else
@@ -228,13 +241,15 @@ function new (src)
 		self:set_state(walk)
 
 		if direction == "right" then
-			if self.x < 650 - 50 then
-				self.x = self.x + self.speed
-			end
+			self:movex(self.speed)
+			-- if self.x < 650 - 50 then
+			-- 	self.x = self.x + self.speed
+			-- end
 		else
-			if self.x > 50 then
-				self.x = self.x - self.speed
-			end
+			self:movex(0-self.speed)
+			-- if self.x > 50 then
+			-- 	self.x = self.x - self.speed
+			-- end
 		end
 	end
 
@@ -250,6 +265,7 @@ function new (src)
 				return self.x-82-38+CENTER, GROUND-self:get_height()+self.y+10, 38, 15
 			end
 		else
+			self.hitting = false
 			return 0,0,0,0
 		end
 	end

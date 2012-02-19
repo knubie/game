@@ -147,6 +147,8 @@ function update (sprite)
 
 		sprite.red_box = {sprite:sjab()}
 
+		-- if opp.shake_frame == shake_dur and 
+
 		if sprite.frame == 3 then
 			sprite:set_state("idle")
 		end
