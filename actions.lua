@@ -145,13 +145,11 @@ function update (sprite)
 
 	elseif sprite.state == "sjab" then
 
+		-- if self.hitting == false and self.frame < 2
 		sprite.red_box = {sprite:sjab()}
+		-- end
 
 		-- if opp.shake_frame == shake_dur and 
-
-		if sprite.frame == 3 then
-			sprite:set_state("idle")
-		end
 
 	elseif sprite.state == "light_hit" then
 		sprite:hit(8) -- start shakin

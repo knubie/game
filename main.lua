@@ -15,10 +15,13 @@ function love.update(dt)
 	-- print(love.timer.getFPS())
 	next_time = next_time + min_dt
 
-	actions.update(sprites.p1)
-	actions.update(sprites.p2)
+	print('hitting:')
+	print(sprites.p1.hitting)
+
 	collisions.update(sprites.p1)
 	collisions.update(sprites.p2)
+	actions.update(sprites.p1)
+	actions.update(sprites.p2)
 
 	if i == 2 then
 		i = 0

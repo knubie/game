@@ -38,6 +38,7 @@ function new (src)
 		jab = " ",
 		foe = nil,
 		shake_frame = 0,
+		hit_frame = 0,
 		push_back_frame = 0,
 		hitting = false,
 		blue_box = {},
@@ -90,9 +91,6 @@ function new (src)
 	function sprite:hit (recovery_frames)
 
 		local function shake ()
-			print('shaking')
-			print('shake frame:')
-			print(self.shake_frame)
 			if self.shake_frame%2 ~= 0 then
 				self:movex(2)
 				-- self.x = self.x+2
@@ -103,9 +101,6 @@ function new (src)
 		end
 
 		local function push_back ()
-			print('red_box:')
-			print(self.foe.red_box[1])
-			print('pushing back')
 			if self.facing == "left" then
 				self:movex(3)
 				-- self.x = self.x + 3
@@ -144,11 +139,8 @@ function new (src)
 
 		local last_frame = #sheets[self.sheet_id].states[self.state].frames
 
-		if self.shake_frame > 0 and self.shake_frame < SHAKE_DUR then
-			self.frame = 1
-
-		elseif self.hitting == true then
-			self.frame = 2
+		if (self.shake_frame > 0 and self.shake_frame < SHAKE_DUR and self.state == "light_hit") or (self.foe.shake_frame > 0 and self.foe.shake_frame < SHAKE_DUR and self.foe.state == "light_hit") then
+			--skip aka stay on frame
 
 		else
 			if self.frame < last_frame then -- if not at last frame, increment
@@ -157,6 +149,11 @@ function new (src)
 				if self.state == "crouch" or self.state == "neutral_jump" or self.state == "forward_jump" or self.state == "backward_jump" or self.state == "light_hit" then
 					self.frame = last_frame -- continue crouching
 				else
+					if self.state == "sjab" then
+						self.state = "idle"
+						print('last frame')
+					end
+					self.hitting = false
 					self.frame = 1 -- start the state animation from the beginning
 				end
 			end
@@ -258,14 +255,13 @@ function new (src)
 	end
 
 	function sprite:sjab()
-		if self.frame == 2 and self.hitting == false then
+		if self.frame == 2 then
 			if self.facing == "right" then
 				return self.x+82-CENTER, GROUND-self:get_height()+self.y+10, 38, 15
 			else
 				return self.x-82-38+CENTER, GROUND-self:get_height()+self.y+10, 38, 15
 			end
 		else
-			self.hitting = false
 			return 0,0,0,0
 		end
 	end

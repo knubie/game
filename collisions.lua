@@ -25,12 +25,14 @@ function update (sprite)
 	end
 
 	if checkHit(sprite, foe) then
-		sprite.red_box = {0,0,0,0}
-		foe.frame = 1
-		foe.shake_frame = 1
-		foe.push_back_frame = 1
-		sprite.hitting = true
-		foe:set_state("light_hit")
+
+		if sprite.hitting == false then
+			foe.frame = 1
+			foe.shake_frame = 0
+			foe.push_back_frame = 0
+			sprite.hitting = true
+			foe:set_state("light_hit")
+		end
 		-- 	if sprite.facing == "right" then
 		-- 		sprite.x = sprite.x - sprite.speed/2
 		-- 		foe.x = foe.x + sprite.speed/2
